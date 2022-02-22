@@ -1,0 +1,95 @@
+
+
+<mat-progress-bar *ngIf="isloading"  class="progress-bar"   mode="indeterminate"  ></mat-progress-bar>
+
+<div *ngIf="!authService.isAuthenticated()">
+  <login-form (isAuth)="isAuth($event)"></login-form>
+</div>
+<!-- <mat-progress-bar mode="indeterminate" class=""></mat-progress-bar> -->
+<div *ngIf="authService.isAuthenticated()" [ngClass]="uiContent"  role="main">
+  <!-- calss="content" -->
+  <mat-sidenav-container class="app-container" autosize fullscreen>
+   <mat-sidenav dark #sidenav id="appnav" [mode]="mode" [opened]="!isMobile">
+      <mat-card   class="profile-card">
+        <mat-card-header  >  
+          <div  mat-card-avatar class="avatar">
+            <img src="/assets/img/avatar0.png" class="avatar">
+          </div>
+
+          <mat-card-title [hidden]="user!==null && user!==undefined" style="padding:5px;">
+            {{user?.firstname}} {{user?.lastname}}
+          </mat-card-title>
+
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon style="margin-left: 55px;margin-top: -11px;">more_vert</mat-icon>
+          </button>
+      
+        </mat-card-header> 
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="logout()">Logout</button>
+          <button mat-menu-item>Change Password</button>
+        </mat-menu>
+      </mat-card>
+      <mat-nav-list >
+        <a mat-list-item routerLink="dashboard">
+          <mat-icon mat-list-icon >insert_chart_outline</mat-icon>
+          <span mat-line>Dashboard</span>
+        </a>
+        <a mat-list-item routerLink="orders">
+          <mat-icon mat-list-icon>shopping_cart</mat-icon>
+          <span mat-line>Order</span>
+        </a>
+        <a mat-list-item routerLink="customers">
+          <mat-icon mat-list-icon>account_box</mat-icon>
+          <span mat-line>Customer</span>
+        </a>
+        <a mat-list-item routerLink="products">
+          <mat-icon mat-list-icon>store</mat-icon>
+          <span mat-line>Product</span>
+        </a>
+        <a mat-list-item routerLink="about">
+          <mat-icon mat-list-icon>info_outline</mat-icon>
+          <span mat-line>About</span>
+        </a>
+
+      </mat-nav-list>
+
+
+
+    </mat-sidenav>
+    <!-- <mat-sidenav-content [hidden]="!authService.isAuthenticated()"> -->
+    <mat-sidenav-content class="sidenav-content" > 
+      <mat-toolbar dark style="background-color:rgb(228, 224, 224)">
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon mat-list-icon>list</mat-icon>
+        </button>
+
+        <span style="margin-left: 20px;width:100%">
+          <a aria-label="GitHub Repository" style=" float:right" class="docs-button docs-navbar-hide-small mat-button"
+            href="" mat-button="" tabindex="0" aria-disabled="false">
+            <span class="mat-button-wrapper">
+              <img alt="svgImg" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4Igp3aWR0aD0iNTAiIGhlaWdodD0iNTAiCnZpZXdCb3g9IjAgMCA1MCA1MCIKc3R5bGU9IiBmaWxsOiMwMDAwMDA7Ij48cGF0aCBkPSJNIDI0LjEyMTA5NCA0LjAwNzgxMyBDIDIzLjYyNSAzLjk0NTMxMyAyMy4xNTIzNDQgNC4yNjk1MzEgMjMuMDMxMjUgNC43NTc4MTMgQyAyMi45Njg3NSA1IDE2Ljg1OTM3NSAyOS4wMjM0MzggMi40MjU3ODEgMzkuMTgzNTk0IEMgMi4xNjAxNTYgMzkuMzcxMDk0IDIgMzkuNjc1NzgxIDIgNDAgTCAyIDQzIEMgMiA0My4zOTQ1MzEgMi4yMzA0NjkgNDMuNzUgMi41ODk4NDQgNDMuOTEwMTU2IEMgMi43MjI2NTYgNDMuOTcyNjU2IDIuODU5Mzc1IDQ0IDMgNDQgQyAzLjIzODI4MSA0NCAzLjQ3NjU2MyA0My45MTQwNjMgMy42NjQwNjMgNDMuNzUgQyAxMi4yNDYwOTQgMzYuMTMyODEzIDI0LjEzMjgxMyAzMyAyNC4yNSAzMi45Njg3NSBDIDI0LjY5MTQwNiAzMi44NTU0NjkgMjUgMzIuNDU3MDMxIDI1IDMyIEwgMjUgNSBDIDI1IDQuNDk2MDk0IDI0LjYyNSA0LjA3MDMxMyAyNC4xMjEwOTQgNC4wMDc4MTMgWiBNIDM2LjE2MDE1NiAxMC4wMTU2MjUgQyAzNS42NzU3ODEgOS45MzM1OTQgMzUuMjA3MDMxIDEwLjIxODc1IDM1LjA1MDc4MSAxMC42ODM1OTQgQyAzNS4wMzEyNSAxMC43NDIxODggMzMuMjM0Mzc1IDE1Ljg5ODQzOCAyNyAyMi40ODQzNzUgTCAyNyAzMiBDIDI3IDMzLjM2NzE4OCAyNi4wNzQyMTkgMzQuNTYyNSAyNC43NTM5MDYgMzQuOTA2MjUgQyAyNC42NzE4NzUgMzQuOTI1NzgxIDE4Ljc4OTA2MyAzNi40OTYwOTQgMTIuNDYwOTM4IDQwLjAzMTI1IEMgMjMuNjIxMDk0IDM2LjY3OTY4OCAzNS44MTI1IDM2Ljk5MjE4OCAzNS45Njg3NSAzNyBDIDM2LjI0MjE4OCAzNy4wMTE3MTkgMzYuNTAzOTA2IDM2LjkwNjI1IDM2LjY5OTIxOSAzNi43MTg3NSBDIDM2Ljg5MDYyNSAzNi41MzEyNSAzNyAzNi4yNjk1MzEgMzcgMzYgTCAzNyAxMSBDIDM3IDEwLjUxMTcxOSAzNi42NDQ1MzEgMTAuMDkzNzUgMzYuMTYwMTU2IDEwLjAxNTYyNSBaIE0gNDcuMDMxMjUgMTcgQyA0Ni43MjI2NTYgMTYuOTkyMTg4IDQ2LjQyMTg3NSAxNy4xMjUgNDYuMjIyNjU2IDE3LjM3MTA5NCBDIDQ0LjEzMjgxMyAxOS45NjQ4NDQgNDEuNzA3MDMxIDIyLjQxNDA2MyAzOSAyNC42OTE0MDYgTCAzOSAzNiBDIDM5IDM2LjgwODU5NCAzOC42Njc5NjkgMzcuNTkzNzUgMzguMDg5ODQ0IDM4LjE1MjM0NCBDIDM3LjUyNzM0NCAzOC42OTkyMTkgMzYuNzg5MDYzIDM5IDM2LjAxNTYyNSAzOSBMIDM1LjkwNjI1IDM5IEMgMzUuODU1NDY5IDM4Ljk5NjA5NCAzNS41MzEyNSAzOC45ODgyODEgMzQuOTcyNjU2IDM4Ljk4ODI4MSBDIDMxLjcxMDkzOCAzOC45ODgyODEgMTQuOTE3OTY5IDM5LjMwNDY4OCA0LjU1MDc4MSA0NS41NjY0MDYgQyA0LjQyOTY4OCA0NS42NDA2MjUgNC4zMzIwMzEgNDUuNjgzNTk0IDQuMjQyMTg4IDQ1LjcxODc1IEMgNy4xODM1OTQgNDUuMDExNzE5IDE2LjM2NzE4OCA0MyAyNiA0MyBDIDM3LjYwMTU2MyA0MyA0Ni41OTc2NTYgNDUuOTE3OTY5IDQ2LjY4NzUgNDUuOTQ5MjE5IEMgNDYuOTkyMTg4IDQ2LjA1MDc4MSA0Ny4zMjQyMTkgNDYgNDcuNTg1OTM4IDQ1LjgxMjUgQyA0Ny44NDc2NTYgNDUuNjIxMDk0IDQ4IDQ1LjMyMDMxMyA0OCA0NSBMIDQ4IDE4IEMgNDggMTcuNTc0MjE5IDQ3LjczMDQ2OSAxNy4xOTkyMTkgNDcuMzMyMDMxIDE3LjA1ODU5NCBDIDQ3LjIzMDQ2OSAxNy4wMTk1MzEgNDcuMTMyODEzIDE3LjAwMzkwNiA0Ny4wMzEyNSAxNyBaIj48L3BhdGg+PC9zdmc+"/>
+              &nbsp;&nbsp;&nbsp;<span style="font-size: 30px;">TruCrm</span> </span>
+          </a>
+        </span>
+        <span style="float:right">
+
+        </span>
+      </mat-toolbar>
+      <div class="main-content" > <!-- [hidden]="!authService.isAuthenticated()"> -->
+        <router-outlet></router-outlet>
+      </div>
+      <!-- <footer class="footer" [ngStyle]="{'position': isMobile?'relative':'absolute'}">
+        <span style="font-family:sans-serif">&copy; GROUP_CSE_A_07 </span>
+      </footer> -->
+    </mat-sidenav-content>
+
+
+  
+
+  </mat-sidenav-container>
+
+</div>
+
+
+
